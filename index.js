@@ -1,6 +1,5 @@
-'use strict'
-
 const assert = require('assert')
+
 module.exports = cacheElement
 
 const __slice = Function.prototype.call.bind(Array.prototype.slice)
