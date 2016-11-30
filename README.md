@@ -21,9 +21,9 @@ var html = require('bel')
 
 var element = Element()
 
-let el = element('Tubi') // creates new element
-let el = element('Tubi') // returns cached element (proxy)
-let el = element('Babs') // creates new element
+let el = element('Tubi', 12) // creates new element
+let el = element('Tubi', 12) // returns cached element (proxy)
+let el = element('Babs', 12) // creates new element
 
 function Element () {
   return cache(function (name, age) {
@@ -67,21 +67,33 @@ function Element () {
 
 ## API
 ### createEl = cache(render(...args), compare?)
-Cache an element. The `compare` function is optional, and by default compares
-the first and second argument with `===`:
+Cache an element. The `compare` function is optional, and defaults to:
 ```js
-function compare (curr, prev) {
-  if (curr && !prev) return true
-  return (prev === curr)
+function compare (args1, args2) {
+  var length = args1.length
+  if (length !== args2.length) return false
+  for (var i = 0; i < length; i++) {
+    if (args1[i] !== args2[i]) return false
+  }
+  return true
 }
 ```
 
-### createEl = widget(render(update(onupdate((...args))))
+### createEl = widget(methods)
 Render a widget. Takes a `render` function which exposes an `update` function
 which takes an `onupdate` function which is passed arguments whenever arguments
 are passed into the tree. Unlike `cache`, `widget` takes no `compare` function
 as it will always return a `proxy` element. If you want to prevent any updates
 from happening, run a comparison inside `onupdate`.
+
+Render a widget. Takes an object with the following methods:
+- __render(...args):__ called to render a node. Expects HTML nodes to be
+  returned
+- __onupdate(el, ...args):__ called when new arguments are passed in. The first
+  argument is the rendered node, any arguments are appended as the arguments
+- __onload(el):__ called when the DOM node is mounted on the DOM tree
+- __onunload(el):__ called when the DOM node is dismounted from the DOM tree.
+  Useful to clean up variables, trigger transitions and the like.
 
 ### el = createEl(...args)
 Render an element, passing it arbitrary arguments. The arguments are passed to
