@@ -24,7 +24,6 @@
   "license": "MIT",
   "dependencies": {
     "global": "^4.3.1",
-    "noop2": "^2.0.0",
     "on-load": "^3.2.0"
   },
   "devDependencies": {
