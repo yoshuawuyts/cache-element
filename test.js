@@ -1,5 +1,6 @@
 var cacheElement = require('./')
 var widget = require('./widget')
+var morph = require('nanomorph')
 var test = require('tape')
 var html = require('bel')
 
@@ -18,19 +19,20 @@ test('cache', (t) => {
     var el1 = render('mittens')
     t.equal(String(el1), '<div>mittens</div>', 'init render success')
 
-    var el2 = render('mittens', 'mittens')
+    var el2 = render('mittens')
     var same1 = el2.isSameNode(el1)
     t.equal(same1, true, 'proxy success')
 
-    var el3 = render('scruffles', 'mittens')
+    var el3 = render('scruffles')
     t.equal(String(el3), '<div>scruffles</div>', 're-render success')
   })
 
   t.test('should accept a custom compare function', (t) => {
     t.plan(2)
     var create = (name) => html`<div>${name}</div>`
-    var compare = (el) => (el === 'humans!')
-    var render = cacheElement(create, compare)
+    var render = cacheElement(create, function (args1, args2) {
+      return args1[0] === 'humans!'
+    })
 
     var el1 = render('mittens')
     t.equal(String(el1), '<div>mittens</div>', 'init render success')
@@ -48,27 +50,29 @@ test('widget', (t) => {
   })
 
   t.test('should render elements', (t) => {
-    t.plan(3)
-    var render = createNode()
+    t.plan(4)
+    var element = Element()
 
-    var el1 = render('mittens')
-    t.equal(String(el1.childNodes[0].data), 'mittens', 'init render success')
+    var el1 = element('mittens')
+    var expected = '<div>mittens</div>'
+    t.equal(String('<div>mittens</div>'), expected, 'init render success')
 
-    var el2 = render('snowball')
+    var el2 = element('snowball')
     var same1 = el2.isSameNode(el1)
     t.equal(same1, true, 'proxy success')
+    t.ok(/snowball/.test(el1.toString()), 'content was updated')
 
-    var el3 = render('scruffles')
+    var el3 = element('scruffles')
     var same2 = el3.isSameNode(el1)
     t.equal(same2, true, 'proxy success')
 
-    function createNode () {
+    function Element () {
       return widget({
         onupdate: function (el, newName) {
-          el.innerText = newName
+          morph(html`<p>${newName}</p>`, el)
         },
         render: function (name) {
-          return html`<div>${name}</div>`
+          return html`<p>${name}</p>`
         }
       })
     }

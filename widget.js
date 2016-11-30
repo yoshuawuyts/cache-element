@@ -53,8 +53,10 @@ function widgetify (methods, compare) {
           return (el === _element)
         }
       }
-      if (_onupdate && compare(_args, args)) {
-        _onupdate.apply(null, args)
+      if (_onupdate && !compare(_args, args)) {
+        var copy = args.slice(0)
+        copy.unshift(_element) // add element as first arg
+        _onupdate.apply(null, copy)
         _args = args
       }
       return _proxy

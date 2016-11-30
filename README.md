@@ -16,22 +16,24 @@ React's `.shouldComponentUpdate()` method, but only using native DOM methods.
 Here we take a regular element, and cache it so re-renders are fast. We compare
 the arguments on each run passing it to the `compare` function:
 ```js
-const cache = require('cache-element')
-const html = require('bel')
+var cache = require('cache-element')
+var html = require('bel')
 
-const renderEl = cache(createEl, function compare (curr, prev) {
-  if (curr && !prev) return true
-  return (prev === curr)
-})
+var element = Element()
 
-let el = renderEl('Tubi') // creates new element
-let el = renderEl('Tubi', 'Tubi') // returns cached element (proxy)
-let el = renderEl('Babs', 'Tubi') // creates new element
+let el = element('Tubi') // creates new element
+let el = element('Tubi') // returns cached element (proxy)
+let el = element('Babs') // creates new element
 
-function createEl (name, age) {
-  return html`
-    <p>The person's name is ${name}</p>
-  `
+function Element () {
+  return cache(function (name, age) {
+    return html`
+      <section>
+        <p>The person's name is ${name}</p>
+        <p>The person's age is ${age}</p>
+      </section>
+    `
+  })
 }
 ```
 
@@ -39,40 +41,28 @@ function createEl (name, age) {
 Here we take a widget (e.g. d3, gmaps) and wrap it so it return a DOM node
 once, and then only has to worry about managing its lifecycle:
 ```js
-const widget = require('cache-element/widget')
-const html = require('bel')
+var widget = require('cache-element/widget')
+var morph = require('nanomorph')
+var html = require('bel')
 
-const renderEl = widget(function createEl (update) {
-  let name = null
-  let age = null
+var element = Element()
 
-  update(onupdate)
+var el = element('Tubi', 12) // creates new element
+var el = element('Tubi', 12) // returns cached element (proxy)
+var el = element('Babs', 25) // returns cached element (proxy)
 
-  return html`
-    <p onload=${onload} onunload=${onunload}>
-      Name is ${name} and age is ${age}
-    </p>
-  `
+function Element () {
+  return widget({
+    onupdate: function (el, name, age) {
+      var newEl = html`<p>Name is ${name} and age is ${age}</p>`
+      morph(el, newEl)
+    },
+    render: function (name, age) {
+      return html`<p>Name is ${name} and age is ${age}</p>`
+    }
+  })
+}
 
-  function onupdate (newName, newAge) {
-    name = newName
-    age = newAge
-  }
-
-  function onload () {
-    console.log('added to DOM')
-  }
-
-  function onunload () {
-    name = null
-    age = null
-    console.log('removed from DOM')
-  }
-})
-
-let el = renderEl('Tubi', 12) // creates new element
-let el = renderEl('Tubi', 12) // returns cached element (proxy)
-let el = renderEl('Babs', 25) // returns cached element (proxy)
 ```
 
 ## API
@@ -111,13 +101,13 @@ time, so we need a way to reference mounted nodes in the tree without actually
 using them. Hence the proxy pattern, and the recently added support for it in
 certain diffing engines:
 ```js
-const html = require('bel')
+var html = require('bel')
 
-const el1 = html`<div>pink is the best</div>`
-const el2 = html`<div>blue is the best</div>`
+var el1 = html`<div>pink is the best</div>`
+var el2 = html`<div>blue is the best</div>`
 
 // let's proxy el1
-const proxy = html`<div></div>`
+var proxy = html`<div></div>`
 proxy.isSameNode = function (targetNode) {
   return (targetNode === el1)
 }
