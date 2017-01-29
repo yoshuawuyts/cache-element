@@ -30,7 +30,7 @@
     "bel": "^4.5.0",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "dependency-check": "^2.6.0",
+    "dependency-check": "^2.8.0",
     "envify": "^4.0.0",
     "istanbul": "^0.4.5",
     "nanomorph": "^1.1.0",
