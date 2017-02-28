@@ -34,7 +34,7 @@
     "envify": "^4.0.0",
     "istanbul": "^0.4.5",
     "nanomorph": "^1.1.0",
-    "standard": "^8.3.0",
+    "standard": "^9.0.0",
     "tape": "^4.6.0",
     "uglifyify": "^3.0.4",
     "uglifyjs": "^2.4.10",
