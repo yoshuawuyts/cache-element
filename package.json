@@ -27,7 +27,7 @@
     "on-load": "^3.2.0"
   },
   "devDependencies": {
-    "bel": "^4.5.0",
+    "bel": "^4.6.0",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
     "dependency-check": "^2.6.0",
