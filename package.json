@@ -4,12 +4,9 @@
   "description": "Memoize a bel element",
   "main": "index.js",
   "scripts": {
-    "deps": "dependency-check . --entry widget.js && dependency-check . --extra --no-dev --entry widget.js",
-    "build:dev": "./scripts/build dev",
-    "build:min": "./scripts/build min",
-    "prepublish": "npm run build:dev && npm run build:min",
-    "test": "standard *.js && npm run deps && NODE_ENV=test node test",
-    "test:cov": "standard && npm run deps && NODE_ENV=test istanbul cover test.js"
+    "deps": "dependency-check . && dependency-check . --extra --no-dev",
+    "test": "standard *.js && npm run deps",
+    "test:cov": "standard && npm run deps"
   },
   "repository": "yoshuawuyts/cache-element",
   "keywords": [
@@ -23,21 +20,10 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "global": "^4.3.1",
-    "on-load": "^3.2.0"
+    "nanocomponent": "^3.0.2"
   },
   "devDependencies": {
-    "bel": "^4.5.0",
-    "browserify": "^13.1.1",
-    "bundle-collapser": "^1.2.1",
-    "dependency-check": "^2.6.0",
-    "envify": "^4.0.0",
-    "istanbul": "^0.4.5",
-    "nanomorph": "^1.1.0",
-    "standard": "^8.3.0",
-    "tape": "^4.6.0",
-    "uglifyify": "^3.0.4",
-    "uglifyjs": "^2.4.10",
-    "unassertify": "^2.0.3"
+    "dependency-check": "^2.8.0",
+    "standard": "^9.0.2"
   }
 }
