@@ -4,6 +4,7 @@ module.exports = CacheElement
 
 function CacheElement (render) {
   if (!(this instanceof CacheElement)) return new CacheElement(render)
+  Nanocomponent.call(this)
   this._handleRender = render
 }
 CacheElement.prototype = Object.create(Nanocomponent.prototype)
