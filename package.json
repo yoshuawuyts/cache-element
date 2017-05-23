@@ -20,7 +20,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "nanocomponent": "^3.0.2"
+    "nanocomponent": "^5.0.0"
   },
   "devDependencies": {
     "dependency-check": "^2.8.0",
